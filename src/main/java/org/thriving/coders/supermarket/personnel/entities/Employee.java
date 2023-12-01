@@ -5,19 +5,20 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "employees")
 public class Employee {
     @Id
-    Long id;
+    Integer id;
 
-    @Getter
-    @Setter
     @Column(name = "firstName")
     String firstName;
 
-    @Getter
-    @Setter
     @Column(name = "lastName")
     String lastName;
+
+    @Column(name = "position")
+    String position;
 }
