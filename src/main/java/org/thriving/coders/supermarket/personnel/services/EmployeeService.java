@@ -3,6 +3,7 @@ package org.thriving.coders.supermarket.personnel.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.thriving.coders.supermarket.personnel.entities.Employee;
@@ -68,8 +69,8 @@ public class EmployeeService {
             session.beginTransaction();
             session.save(employee);
             session.getTransaction().commit();
-        } catch (Exception e) {
-            // Обработка исключений или логирование ошибок
+        } catch (HibernateException e) {
+            System.out.println("---" + e.getMessage());
         }
     }
 

@@ -2,6 +2,7 @@ package org.thriving.coders.supermarket.personnel.controller;
 
 import static spark.Spark.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.thriving.coders.supermarket.personnel.entities.Employee;
 import org.thriving.coders.supermarket.personnel.services.EmployeeService;
@@ -34,8 +35,15 @@ public class EmployeeController {
         // save new employee
         post("/employees", (req, res) -> {
             res.type("application/json");
-            Employee employee = objectMapper.readValue(req.body(), Employee.class);
-            employeeService.saveEmployee(employee);
+            try {
+                Employee employee = objectMapper.readValue(req.body(), Employee.class);
+                employeeService.saveEmployee(employee);
+            } catch (JsonProcessingException e) {
+                System.out.println("#### - " + e.getMessage());
+                e.getStackTrace();
+                return "Employee not saved!";
+            }
+
             return "Employee saved successfully!";
         });
 
