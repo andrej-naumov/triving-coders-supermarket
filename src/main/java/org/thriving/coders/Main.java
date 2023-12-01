@@ -7,8 +7,6 @@ import org.thriving.coders.supermarket.personnel.controller.EmployeeController;
 import org.thriving.coders.supermarket.personnel.services.EmployeeService;
 import org.thriving.coders.supermarket.util.HibernateUtil;
 
-import static spark.Spark.get;
-
 @Slf4j
 public class Main {
     public static void main(String[] args) {
@@ -21,12 +19,6 @@ public class Main {
 
         // register controllers and services
         new EmployeeController(new EmployeeService(sessionFactory, objectMapper), objectMapper);
-
-        get("/hello", (req, res) -> {
-            res.type("application/json");
-            return "{\"message\":\"Hello world\"}";
-        });
-
 
         // server startup information
         log.info("...server is running");
