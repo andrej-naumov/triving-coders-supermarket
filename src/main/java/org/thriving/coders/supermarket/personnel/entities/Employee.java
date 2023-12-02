@@ -15,11 +15,11 @@ public class Employee {
     Integer id;
 
     @Column(name = "firstName")
-    String firstName;
+    String firstName; // Employee's first name field
 
     @Column(name = "lastName")
-    String lastName;
+    String lastName; // Employee's last name field
 
     @Column(name = "position")
-    String position;
+    String position; // Employee's position field
 }
