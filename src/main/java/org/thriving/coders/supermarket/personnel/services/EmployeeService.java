@@ -17,50 +17,30 @@ import java.util.List;
 public class EmployeeService {
 
     private final SessionFactory sessionFactory;
-    private final ObjectMapper objectMapper; // ObjectMapper from Jackson
 
-
-    public EmployeeService(SessionFactory sessionFactory, ObjectMapper objectMapper) {
+    public EmployeeService(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-        this.objectMapper = objectMapper;
     }
 
     /**
      * find all employees
      * return in JSON format
      */
-    public String findAllEmployeesAsJson() {
+    public List<Employee> findAllEmployees() {
         try (Session session = sessionFactory.openSession()) {
-            List<Employee> employees = session.createQuery("from Employee", Employee.class).list();
-            return objectMapper.writeValueAsString(employees); //  JSON - String as return
+            return session.createQuery("from Employee", Employee.class).list();
         } catch (Exception e) {
-            // TODO
-            log.error("findAllEmployees - error: " + e.getMessage());
+            log.error("EmployeeService.findAllEmployees - error: " + e.getMessage());
             return null;
         }
     }
 
     public Employee findEmployeeById(int employeeId) {
         try (Session session = sessionFactory.openSession()) {
-            Employee employee = session.get(Employee.class, employeeId);
-            if (employee != null) {
-                return employee;
-            }
+            return session.get(Employee.class, employeeId);
         } catch (Exception e) {
-            // Обработка исключений или логирование ошибок
-            e.getStackTrace();
+            log.error("EmployeeService.findEmployeeById - error: " + e.getMessage());
         }
-        return null;
-    }
-
-    public String findEmployeeByIdAsJson(int employeeId) {
-        try {
-            return objectMapper.writeValueAsString(this.findEmployeeById(employeeId));
-        } catch (JsonProcessingException e) {
-            // Обработка исключений или логирование ошибок
-            //throw new RuntimeException(e);
-        }
-
         return null;
     }
 
@@ -70,7 +50,7 @@ public class EmployeeService {
             session.save(employee);
             session.getTransaction().commit();
         } catch (HibernateException e) {
-            System.out.println("---" + e.getMessage());
+            log.error("EmployeeService.saveEmployee - error: " + e.getMessage());
         }
     }
 
@@ -80,7 +60,7 @@ public class EmployeeService {
             session.update(employee);
             session.getTransaction().commit();
         } catch (Exception e) {
-            // Обработка исключений или логирование ошибок
+            log.error("EmployeeService.updateEmployee - error: " + e.getMessage());
         }
     }
 
@@ -90,7 +70,7 @@ public class EmployeeService {
             session.delete(employee);
             session.getTransaction().commit();
         } catch (Exception e) {
-            // Обработка исключений или логирование ошибок
+            log.error("EmployeeService.deleteEmployee - error: " + e.getMessage());
         }
     }
 

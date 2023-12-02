@@ -10,7 +10,6 @@ import org.thriving.coders.supermarket.util.HibernateUtil;
 @Slf4j
 public class Main {
     public static void main(String[] args) {
-
         // server startup information
         log.info("server goes live...");
 
@@ -18,10 +17,9 @@ public class Main {
         final ObjectMapper objectMapper = new ObjectMapper();
 
         // register controllers and services
-        new EmployeeController(new EmployeeService(sessionFactory, objectMapper), objectMapper);
+        new EmployeeController(new EmployeeService(sessionFactory), objectMapper);
 
         // server startup information
         log.info("...server is running");
     }
-
 }

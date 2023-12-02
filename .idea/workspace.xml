@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6f66dfc3-c80f-4d10-a303-be9e3194b22e" name="Changes" comment="removed &quot;Hello world!&quot; routing">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/logback.xml" afterDir="false" />
+    <list default="true" id="6f66dfc3-c80f-4d10-a303-be9e3194b22e" name="Changes" comment="code refactoring + logging with info mode">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/thriving/coders/supermarket/util/JsonTransformer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/thriving/coders/supermarket/util/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/thriving/coders/supermarket/util/MessageLevel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/thriving/coders/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/thriving/coders/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/thriving/coders/supermarket/personnel/controller/EmployeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/thriving/coders/supermarket/personnel/controller/EmployeeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/thriving/coders/supermarket/personnel/entities/Employee.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/thriving/coders/supermarket/personnel/entities/Employee.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/thriving/coders/supermarket/personnel/services/EmployeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/thriving/coders/supermarket/personnel/services/EmployeeService.java" afterDir="false" />
@@ -135,7 +138,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701462897965</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="code refactoring + logging with info mode">
+      <option name="closed" value="true" />
+      <created>1701465952002</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1701465952002</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -153,18 +164,10 @@
     <MESSAGE value="Welcome to Thriving-Coder supermarket =)" />
     <MESSAGE value="Refactoring + added new routes + added new dependency" />
     <MESSAGE value="removed &quot;Hello world!&quot; routing" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed &quot;Hello world!&quot; routing" />
+    <MESSAGE value="code refactoring + logging with info mode" />
+    <option name="LAST_COMMIT_MESSAGE" value="code refactoring + logging with info mode" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/thriving/coders/supermarket/personnel/services/EmployeeService.java</url>
-          <line>68</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="org.eclipse.jetty.server.HttpInputOverHTTP" memberName="_channelState" />
