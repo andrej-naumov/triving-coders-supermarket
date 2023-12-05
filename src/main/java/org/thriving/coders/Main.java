@@ -9,8 +9,8 @@ import org.thriving.coders.supermarket.util.HibernateUtil;
 import spark.Request;
 import spark.Response;
 
-import static spark.route.HttpMethod.options;
-import static spark.Spark.*;
+import static spark.Spark.before;
+import static spark.Spark.options;
 
 @Slf4j
 public class Main {
