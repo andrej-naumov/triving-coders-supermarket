@@ -54,7 +54,7 @@ public class EmployeeController {
             int employeeId = Integer.parseInt(req.params("id"));
             Employee employee = employeeService.findEmployeeById(employeeId);
             if (employee != null) {
-                log.info("Find Employee with id: {} -  is found", employee.getId());
+                log.info("Find Employee with id: {} -  is found", employee.getEmployeeId());
                 return employee;
             } else {
                 log.info("Employee with id: " + employeeId + " not found!");
@@ -82,7 +82,7 @@ public class EmployeeController {
             int employeeId = Integer.parseInt(req.params("id"));
             try {
                 Employee updatedEmployee = objectMapper.readValue(req.body(), Employee.class);
-                updatedEmployee.setId(employeeId);
+                updatedEmployee.setEmployeeId(employeeId);
                 employeeService.updateEmployee(updatedEmployee);
                 log.info("Employee with id: {} updated successfully!", employeeId);
                 return new Message(MessageLevel.SUCCESS, "Employee saved successfully!");

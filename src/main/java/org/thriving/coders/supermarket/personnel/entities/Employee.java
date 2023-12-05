@@ -12,7 +12,8 @@ import javax.persistence.*;
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // ID generation strategy
-    Integer id;
+    @Column(name = "employeeId")
+    Integer employeeId; // Employee's primary key
 
     @Column(name = "firstName")
     String firstName; // Employee's first name field
@@ -22,4 +23,13 @@ public class Employee {
 
     @Column(name = "position")
     String position; // Employee's position field
+
+    @Column(name = "department")
+    private int department;
+
+    @Column(name = "contact_info")
+    private String contactInfo;
+
+    @Column(name = "hourly_rate")
+    private int hourlyRate;
 }
