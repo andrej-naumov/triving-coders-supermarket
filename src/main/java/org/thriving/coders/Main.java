@@ -18,7 +18,7 @@ public class Main {
         // server startup information
         log.info("server goes live...");
 
-        // enable CORS for all req from http://localhost:4200
+        // enable CORS for all req
         options("/*", (request, response) -> {
             addEnableCORS_Headers(request, response);
 
