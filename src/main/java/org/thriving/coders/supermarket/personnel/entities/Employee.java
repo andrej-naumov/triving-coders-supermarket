@@ -27,9 +27,12 @@ public class Employee {
     @Column(name = "department")
     private int department;
 
-    @Column(name = "contact_info")
+    @Column(name = "contactInfo")
     private String contactInfo;
 
-    @Column(name = "hourly_rate")
+    @Column(name = "hourlyRate")
     private int hourlyRate;
+
+    @Column(name = "commentary")
+    private String commentary;
 }
