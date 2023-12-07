@@ -59,10 +59,16 @@ public class ResetEmployeesTables {
                 int department = faker.number().numberBetween(1, 5);
                 String contactInfo = faker.phoneNumber().phoneNumber();
                 int hourlyRate = faker.number().numberBetween(10, 50);
+                String commentary = faker.funnyName().name();
 
-                String insertEmployeeQuery = String.format("INSERT INTO employees (firstName, lastName, position, department, contactInfo, hourlyRate) VALUES ('%s', '%s', '%s', %d, '%s', %d)",
-                        firstName, lastName, position, department, contactInfo, hourlyRate);
-                statement.executeUpdate(insertEmployeeQuery, Statement.RETURN_GENERATED_KEYS);
+                String insertEmployeeQuery = String.format("INSERT INTO employees (firstName, lastName, position, department, contactInfo, hourlyRate, commentary) VALUES ('%s', '%s', '%s', %d, '%s', %d, '%s')",
+                        firstName, lastName, position, department, contactInfo, hourlyRate, commentary);
+                try {
+                    statement.executeUpdate(insertEmployeeQuery, Statement.RETURN_GENERATED_KEYS);
+                }catch (java.sql.SQLException e) {
+                    log.error("SQL error: {}", e.getMessage());
+                }
+
 
 
                 // Get the generated employeeId for use in other tables
