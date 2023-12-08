@@ -18,8 +18,11 @@ import java.util.Locale;
  */
 @Slf4j
 public class ResetEmployeesTables {
-    private static final int EMPLOYEES_COUNT = 10;
+
     private static final String LANGUAGE = "ru";
+    private static final int EMPLOYEES_COUNT = 10;
+    private static final int EMPLOYEES_ASSESSMENTS_COUNT = 10;
+
 
     private static final String[] EMPLOYEES_TABLES = {
             "`supermarket`.`employees_assessments`",
@@ -33,7 +36,7 @@ public class ResetEmployeesTables {
         Faker faker = new Faker(new Locale(LANGUAGE));
 
         Connection connection = null;
-        try { // edit connection string
+        try { // edit connection string, if the database user is different
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/supermarket", "supermarket", "6zv7ss@QfeI37jTz");
         } catch (SQLException e) {
             log.error("Not connected to database: {}", e.getSQLState());
@@ -79,29 +82,31 @@ public class ResetEmployeesTables {
                         log.info("Added employee with id: {}", employeeId);
 
                         // Filling the table employees_assessments
-                        // Generate date within up to - 2 months from the current date
+                        // Generate a random number of months to subtract from the current date
                         Date currentDate = new Date();
                         LocalDate localCurrentDate = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-                        // Generate a random number of months to subtract from the current date
-                        int monthsToAddOrSubtract = faker.number().numberBetween(0, -2);
+                        for (int j = 0; j < EMPLOYEES_ASSESSMENTS_COUNT; j++) {
 
-                        LocalDate generatedDate = localCurrentDate.plusMonths(monthsToAddOrSubtract);
-                        Date assessmentDate = Date.from(generatedDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                            // Generate date within up to - 2 months from the current date
+                            int monthsToAddOrSubtract = faker.number().numberBetween(0, -2);
 
-                        // Convert date to MySQL format
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        String formattedDate = dateFormat.format(assessmentDate);
+                            LocalDate generatedDate = localCurrentDate.plusMonths(monthsToAddOrSubtract);
+                            Date assessmentDate = Date.from(generatedDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-                        int performanceRating = faker.number().numberBetween(1, 5);
-                        int salesAnalysis = faker.number().numberBetween(100, 500);
+                            // Convert date to MySQL format
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                            String formattedDate = dateFormat.format(assessmentDate);
 
-                        // Filling the table employees_assessments with correct date
-                        String insertAssessmentQuery = String.format("INSERT INTO employees_assessments (employeeId, assessmentDate, performanceRating, salesAnalysis) VALUES (%d, '%s', %d, %d)",
-                                employeeId, formattedDate, performanceRating, salesAnalysis);
-                        statement.executeUpdate(insertAssessmentQuery);
-                        log.info("Added employee  with id: {} to employees_assessments", employeeId);
+                            int performanceRating = faker.number().numberBetween(1, 5);
+                            int salesAnalysis = faker.number().numberBetween(100, 500);
 
+                            // Filling the table employees_assessments with correct date
+                            String insertAssessmentQuery = String.format("INSERT INTO employees_assessments (employeeId, assessmentDate, performanceRating, salesAnalysis) VALUES (%d, '%s', %d, %d)",
+                                    employeeId, formattedDate, performanceRating, salesAnalysis);
+                            statement.executeUpdate(insertAssessmentQuery);
+                            log.info("Added employee  with id: {} to employees_assessments", employeeId);
+                        }
 
 
 
