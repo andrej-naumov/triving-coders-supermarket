@@ -14,7 +14,7 @@
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
 
-        <!-- Validate the database schema on startup -->
+        <!-- (validate || update) the database schema on startup -->
         <property name="hbm2ddl.auto">validate</property>
 
         <!-- Names the annotated entity class -->
