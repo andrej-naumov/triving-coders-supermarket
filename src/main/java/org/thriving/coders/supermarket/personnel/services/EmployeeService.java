@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.thriving.coders.supermarket.personnel.entities.Employee;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class EmployeeService {
             return session.createQuery("from Employee", Employee.class).list();
         } catch (Exception e) {
             log.error("EmployeeService.findAllEmployees - error: " + e.getMessage());
-            return null;
+            return Collections.emptyList();
         }
     }
 
