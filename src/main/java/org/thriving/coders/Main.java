@@ -3,7 +3,9 @@ package org.thriving.coders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
+import org.thriving.coders.supermarket.personnel.controller.EmployeeAssessmentController;
 import org.thriving.coders.supermarket.personnel.controller.EmployeeController;
+import org.thriving.coders.supermarket.personnel.services.EmployeeAssessmentService;
 import org.thriving.coders.supermarket.personnel.services.EmployeeService;
 import org.thriving.coders.supermarket.util.HibernateUtil;
 import spark.Request;
@@ -37,6 +39,7 @@ public class Main {
 
         // register controllers and services
         new EmployeeController(new EmployeeService(sessionFactory), objectMapper);
+        new EmployeeAssessmentController(new EmployeeAssessmentService(sessionFactory), objectMapper);
 
         // server startup information
         log.info("...server is running");
