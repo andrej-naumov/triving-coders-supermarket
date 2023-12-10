@@ -135,7 +135,7 @@ public class ResetEmployeesTables {
 
                             log.info("Added employee with id: {} to employees_schedules for day: {}",employeeId, backDaysDate );
                         }
-                        // Обновление времени начала работы для следующего сотрудника
+                        // Updating the start time for the next employee
                         startHour++;
                         if (startHour > 13) {
                             // employees don't work nights
