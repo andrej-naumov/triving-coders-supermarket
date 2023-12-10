@@ -16,7 +16,6 @@ import org.thriving.coders.supermarket.util.MessageLevel;
 import java.util.List;
 @Slf4j
 public class EmployeeController {
-
     private final EmployeeService employeeService;
     private final ObjectMapper objectMapper;
     /**
@@ -39,7 +38,7 @@ public class EmployeeController {
         get("/employees", (req, res) -> {
             res.type("application/json");
             List<Employee> employees = employeeService.findAllEmployees();
-            if (employees != null) {
+            if (employees.size() != 0) {
                 log.info("Find all employees. Count of employees: {}", employees.size());
                 return employees;
             } else {
