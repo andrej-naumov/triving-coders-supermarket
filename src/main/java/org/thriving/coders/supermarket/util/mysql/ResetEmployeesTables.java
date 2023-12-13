@@ -23,11 +23,14 @@ public class ResetEmployeesTables {
     private static final int EMPLOYEES_COUNT = 20;//0;
     private static final int EMPLOYEES_ASSESSMENTS_COUNT = 1;//0;
     private static final int EMPLOYEES_SCHEDULES_DAYS_BACK = 5; // Number of days ago for schedules generation
-    private static final int WORK_START = 5; // Start of work at 5 AM o clock
+    private static final int WORK_START_TIME = 5; // Start of work at 5 AM o clock
+    private static  int count_of_sicks = 0; // Number of sick notes
+    private static int count_of_vacations = 0; // Number of vacations
+
 
     public static void main(String[] args) {
 
-        int startHour = WORK_START;// the employee's starting hour
+        int startHour = WORK_START_TIME;// the employee's starting hour
         int startMinute = 30; // minutes of the employee's start time
         int workPreBreakInHour = 4; // duration of work before break in hours
         int breakDuration = 30; // Duration of the break in minutes
@@ -54,7 +57,7 @@ public class ResetEmployeesTables {
                 log.info("All data deleted from table: {}", employeesTable);
             }
 
-            for (int i = 0; i < EMPLOYEES_COUNT; i++) {
+            for (int employees_count = 0; employees_count < EMPLOYEES_COUNT; employees_count++) {
                 // Filling the table employees
                 String firstName = faker.name().firstName();
                 String lastName = faker.name().lastName();
@@ -133,13 +136,25 @@ public class ResetEmployeesTables {
                                     employeeId, formatDate(workAfterBreakStart, "yyyy-MM-dd"), SHIFT_TYPE.WORK_AFTER_BREAK.getValue(), formatDate(workAfterBreakStart), formatDate(workEnd));
                             statement.executeUpdate(insertAfterBreakWorkQuery);
 
-                            log.info("Added employee with id: {} to employees_schedules for day: {}",employeeId, backDaysDate );
+                            log.info("Added employee with id: {} to employees_schedules for day: {}", employeeId, backDaysDate);
                         }
                         // Updating the start time for the next employee
                         startHour++;
                         if (startHour > 13) {
                             // employees don't work nights
-                            startHour = WORK_START;
+                            startHour = WORK_START_TIME;
+                        }
+
+                        if (employeeId % 10 == 0) /* One in ten people get sick */ {
+                            LocalDate sickEnd = LocalDate.now().minusDays(count_of_sicks++ * 7);
+                            LocalDate sickStart = sickEnd.minusDays(5);
+
+                            String insertSickQuery = String.format("INSERT INTO employees_sicks (employeeId, startDate, endDate) VALUES (%d, '%s', '%s')",
+                                    employeeId, formatDate(Date.from(sickStart.atStartOfDay(ZoneId.systemDefault()).toInstant()), "yyyy-MM-dd"),
+                                    formatDate(Date.from(sickEnd.atStartOfDay(ZoneId.systemDefault()).toInstant()), "yyyy-MM-dd"));
+                            statement.executeUpdate(insertSickQuery);
+
+                            log.info("Added sick paper for employee with id: {} between {} and {}", employeeId, sickStart, sickEnd);
                         }
 
 
