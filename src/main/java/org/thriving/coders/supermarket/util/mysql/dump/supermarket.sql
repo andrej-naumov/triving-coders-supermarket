@@ -232,6 +232,11 @@ ALTER TABLE `employees_vacations`
   ADD CONSTRAINT `employees_vacations_ibfk_1` FOREIGN KEY (`vacationId`) REFERENCES `employees` (`employeeId`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
+--
+-- Added default NULL for `employees_sicks`.`medicalCertificate`
+ALTER TABLE `employees_sicks` CHANGE `medicalCertificate` `medicalCertificate` MEDIUMBLOB NULL DEFAULT NULL;
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
