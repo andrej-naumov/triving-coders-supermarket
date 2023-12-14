@@ -28,6 +28,7 @@ public class ResetEmployeesTables {
     private static int count_of_vacations = 0; // Number of vacations
 
 
+
     public static void main(String[] args) {
 
         int startHour = WORK_START_TIME;// the employee's starting hour
@@ -82,6 +83,40 @@ public class ResetEmployeesTables {
                         employeeId = resultSet.getInt(1);
                         log.info("Added employee with id: {}", employeeId);
 
+                        // Add vacation
+                        LocalDate vacationEnd = LocalDate.now().minusDays(count_of_vacations * 10L );
+                        LocalDate vacationStart = vacationEnd.minusDays(30);
+
+                        String insertVacationQuery = String.format("INSERT INTO employees_vacations (employeeId, startDate, endDate) VALUES (%d, '%s', '%s')",
+                                employeeId, formatDate(Date.from(vacationStart.atStartOfDay(ZoneId.systemDefault()).toInstant()), "yyyy-MM-dd"),
+                                formatDate(Date.from(vacationEnd.atStartOfDay(ZoneId.systemDefault()).toInstant()), "yyyy-MM-dd"));
+                        statement.executeUpdate(insertVacationQuery);
+                        log.info("Added vacation for employee with id: {} between {} and {}", employeeId, vacationStart, vacationEnd);
+
+                        // Updating the count of vacations
+                        count_of_vacations++;
+                        if(count_of_vacations > EMPLOYEES_COUNT) {
+                            count_of_vacations = 0;
+                        }
+
+                        // Add sick to `employees_sicks`
+                        boolean isSicked = false;
+                        LocalDate sickEnd = LocalDate.now().minusDays(count_of_sicks * 7L);
+                        LocalDate sickStart = sickEnd.minusDays(5);
+                        if (employeeId % 10 == 0) /* One in ten people get sick */ {
+                            String insertSickQuery = String.format("INSERT INTO employees_sicks (employeeId, startDate, endDate) VALUES (%d, '%s', '%s')",
+                                    employeeId, formatDate(Date.from(sickStart.atStartOfDay(ZoneId.systemDefault()).toInstant()), "yyyy-MM-dd"),
+                                    formatDate(Date.from(sickEnd.atStartOfDay(ZoneId.systemDefault()).toInstant()), "yyyy-MM-dd"));
+                            statement.executeUpdate(insertSickQuery);
+                            isSicked = true;
+                            log.info("Added sick paper for employee with id: {} between {} and {}", employeeId, sickStart, sickEnd);
+                        }
+                        // Updating the count of sticks
+                        count_of_sicks++;
+                        if(count_of_sicks > EMPLOYEES_COUNT/10) {
+                            count_of_sicks = 0;
+                        }
+
                         // Filling the table employees_assessments
                         // Generate a random number of months to subtract from the current date
                         Date currentDate = new Date();
@@ -92,18 +127,27 @@ public class ResetEmployeesTables {
                             // Generate date within up to - 2 months from the current date
                             int monthsToAddOrSubtract = faker.number().numberBetween(0, -2);
 
-                            LocalDate generatedDate = localCurrentDate.plusMonths(monthsToAddOrSubtract);
-                            Date assessmentDate = Date.from(generatedDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                            LocalDate assessmentLocalDate = localCurrentDate.plusMonths(monthsToAddOrSubtract);
 
-                            // Convert date to MySQL format
-                            String formattedDate = formatDate(assessmentDate, "yyyy-MM-dd");
+                            //
+                            if(!assessmentLocalDate.isBefore(vacationStart) && !assessmentLocalDate.isAfter(vacationEnd)){
+                                log.info("Assessment date {} for employee id: {} - is in vacation time from {} to {} and ignored", assessmentLocalDate, employeeId, vacationStart, vacationEnd);
+                                continue;
+                            }
+                            //
+                            if(isSicked && !assessmentLocalDate.isBefore(sickStart) && !assessmentLocalDate.isAfter(sickEnd)){
+                                log.info("Assessment date {} for employee id: {} - is in sick time from {} to {} and ignored", assessmentLocalDate, employeeId, sickStart, sickEnd);
+                                continue;
+                            }
+
+                            Date assessmentDate = Date.from(assessmentLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
                             int performanceRating = faker.number().numberBetween(1, 5);
                             int salesAnalysis = faker.number().numberBetween(100, 500);
 
                             // Filling the table employees_assessments with correct date
                             String insertAssessmentQuery = String.format("INSERT INTO employees_assessments (employeeId, assessmentDate, performanceRating, salesAnalysis) VALUES (%d, '%s', %d, %d)",
-                                    employeeId, formattedDate, performanceRating, salesAnalysis);
+                                    employeeId, formatDate(assessmentDate, "yyyy-MM-dd"), performanceRating, salesAnalysis);
                             statement.executeUpdate(insertAssessmentQuery);
                             log.info("Added employee  with id: {} to employees_assessments", employeeId);
                         }
@@ -113,6 +157,17 @@ public class ResetEmployeesTables {
                             LocalDate backDaysDate = LocalDate.now().minusDays(j);
                             // Check if the day is Sunday
                             if (backDaysDate.getDayOfWeek().getValue() == 7) continue; // we don't work on Sundays
+
+                            //
+                            if(!backDaysDate.isBefore(vacationStart) && !backDaysDate.isAfter(vacationEnd)){
+                                log.info("Schedules date {} for employee id: {} - is in vacation time from {} to {} and ignored", backDaysDate, employeeId, vacationStart, vacationEnd);
+                                continue;
+                            }
+                            //
+                            if(isSicked && !backDaysDate.isBefore(sickStart) && !backDaysDate.isAfter(sickEnd)){
+                                log.info("Schedules date {} for employee id: {} - is in sick time from {} to {} and ignored", backDaysDate, employeeId, sickStart, sickEnd);
+                                continue;
+                            }
 
                             // Logic for calculating the start and end times
                             // Initialization of working time before break
@@ -145,17 +200,10 @@ public class ResetEmployeesTables {
                             startHour = WORK_START_TIME;
                         }
 
-                        if (employeeId % 10 == 0) /* One in ten people get sick */ {
-                            LocalDate sickEnd = LocalDate.now().minusDays(count_of_sicks++ * 7);
-                            LocalDate sickStart = sickEnd.minusDays(5);
 
-                            String insertSickQuery = String.format("INSERT INTO employees_sicks (employeeId, startDate, endDate) VALUES (%d, '%s', '%s')",
-                                    employeeId, formatDate(Date.from(sickStart.atStartOfDay(ZoneId.systemDefault()).toInstant()), "yyyy-MM-dd"),
-                                    formatDate(Date.from(sickEnd.atStartOfDay(ZoneId.systemDefault()).toInstant()), "yyyy-MM-dd"));
-                            statement.executeUpdate(insertSickQuery);
 
-                            log.info("Added sick paper for employee with id: {} between {} and {}", employeeId, sickStart, sickEnd);
-                        }
+
+
 
 
                     }
