@@ -1,4 +1,4 @@
-package org.thriving.coders.supermarket.util.mysql.dump;
+package org.thriving.coders.supermarket.util.fake;
 
 import com.github.javafaker.Faker;
 
