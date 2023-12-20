@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 20, 2023 at 11:00 PM
+-- Generation Time: Dec 20, 2023 at 11:22 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -236,7 +236,7 @@ ALTER TABLE `employees_sicks`
 -- Constraints for table `employees_vacations`
 --
 ALTER TABLE `employees_vacations`
-  ADD CONSTRAINT `employees_vacations_ibfk_1` FOREIGN KEY (`vacationId`) REFERENCES `employees` (`employeeId`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `employees_vacations_ibfk_1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`employeeId`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
