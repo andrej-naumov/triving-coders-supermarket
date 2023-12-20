@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 14. Dez 2023 um 14:10
--- Server-Version: 10.4.32-MariaDB
--- PHP-Version: 8.2.12
+-- Generation Time: Dec 20, 2023 at 11:00 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,15 +18,18 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `supermarket`
+-- Database: `supermarket`
 --
+CREATE DATABASE IF NOT EXISTS `supermarket` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `supermarket`;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `employees`
+-- Table structure for table `employees`
 --
 
+DROP TABLE IF EXISTS `employees`;
 CREATE TABLE `employees` (
   `employeeId` int(11) NOT NULL,
   `firstName` varchar(255) NOT NULL,
@@ -41,9 +44,10 @@ CREATE TABLE `employees` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `employees_assessments`
+-- Table structure for table `employees_assessments`
 --
 
+DROP TABLE IF EXISTS `employees_assessments`;
 CREATE TABLE `employees_assessments` (
   `assessmentId` int(11) NOT NULL,
   `employeeId` int(11) NOT NULL,
@@ -55,9 +59,26 @@ CREATE TABLE `employees_assessments` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `employees_schedules`
+-- Table structure for table `employees_permissions`
 --
 
+DROP TABLE IF EXISTS `employees_permissions`;
+CREATE TABLE `employees_permissions` (
+  `accessId` int(11) NOT NULL,
+  `employeeId` int(11) DEFAULT NULL,
+  `login` varchar(50) DEFAULT NULL,
+  `employeeInternalNumber` int(11) DEFAULT NULL,
+  `passwordHash` varchar(255) DEFAULT NULL,
+  `accessRights` longtext DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employees_schedules`
+--
+
+DROP TABLE IF EXISTS `employees_schedules`;
 CREATE TABLE `employees_schedules` (
   `scheduleId` int(11) NOT NULL,
   `employeeId` int(11) NOT NULL,
@@ -66,134 +87,156 @@ CREATE TABLE `employees_schedules` (
   `workStart` datetime NOT NULL,
   `workEnd` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `employees_sicks`
+-- Table structure for table `employees_sicks`
 --
 
+DROP TABLE IF EXISTS `employees_sicks`;
 CREATE TABLE `employees_sicks` (
   `sickLeaveId` int(11) NOT NULL,
   `employeeId` int(11) NOT NULL,
   `startDate` date NOT NULL,
   `endDate` date NOT NULL,
-  `medicalCertificate` mediumblob DEFAULT NULL
+  `medicalCertificate` mediumblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `employees_vacations`
+-- Table structure for table `employees_vacations`
 --
 
+DROP TABLE IF EXISTS `employees_vacations`;
 CREATE TABLE `employees_vacations` (
   `vacationId` int(11) NOT NULL,
   `employeeId` int(11) NOT NULL,
   `startDate` date NOT NULL,
   `endDate` date NOT NULL,
-  `reason` text DEFAULT NULL
+  `reason` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Indizes der exportierten Tabellen
+-- Indexes for dumped tables
 --
 
 --
--- Indizes für die Tabelle `employees`
+-- Indexes for table `employees`
 --
 ALTER TABLE `employees`
   ADD PRIMARY KEY (`employeeId`),
   ADD KEY `employeeId` (`employeeId`);
 
 --
--- Indizes für die Tabelle `employees_assessments`
+-- Indexes for table `employees_assessments`
 --
 ALTER TABLE `employees_assessments`
   ADD PRIMARY KEY (`assessmentId`),
   ADD KEY `employeeId` (`employeeId`);
 
 --
--- Indizes für die Tabelle `employees_schedules`
+-- Indexes for table `employees_permissions`
+--
+ALTER TABLE `employees_permissions`
+  ADD PRIMARY KEY (`accessId`),
+  ADD KEY `employeeId` (`employeeId`);
+
+--
+-- Indexes for table `employees_schedules`
 --
 ALTER TABLE `employees_schedules`
   ADD PRIMARY KEY (`scheduleId`),
   ADD KEY `employeeId` (`employeeId`);
 
 --
--- Indizes für die Tabelle `employees_sicks`
+-- Indexes for table `employees_sicks`
 --
 ALTER TABLE `employees_sicks`
   ADD PRIMARY KEY (`sickLeaveId`),
   ADD KEY `employeeId` (`employeeId`);
 
 --
--- Indizes für die Tabelle `employees_vacations`
+-- Indexes for table `employees_vacations`
 --
 ALTER TABLE `employees_vacations`
   ADD PRIMARY KEY (`vacationId`),
   ADD KEY `employeeId` (`employeeId`);
 
 --
--- AUTO_INCREMENT für exportierte Tabellen
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT für Tabelle `employees`
+-- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `employeeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `employeeId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `employees_assessments`
+-- AUTO_INCREMENT for table `employees_assessments`
 --
 ALTER TABLE `employees_assessments`
-  MODIFY `assessmentId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `assessmentId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `employees_schedules`
+-- AUTO_INCREMENT for table `employees_permissions`
+--
+ALTER TABLE `employees_permissions`
+  MODIFY `accessId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `employees_schedules`
 --
 ALTER TABLE `employees_schedules`
-  MODIFY `scheduleId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `scheduleId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `employees_sicks`
+-- AUTO_INCREMENT for table `employees_sicks`
 --
 ALTER TABLE `employees_sicks`
-  MODIFY `sickLeaveId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `sickLeaveId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `employees_vacations`
+-- AUTO_INCREMENT for table `employees_vacations`
 --
 ALTER TABLE `employees_vacations`
-  MODIFY `vacationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `vacationId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints der exportierten Tabellen
+-- Constraints for dumped tables
 --
 
 --
--- Constraints der Tabelle `employees_assessments`
+-- Constraints for table `employees_assessments`
 --
 ALTER TABLE `employees_assessments`
   ADD CONSTRAINT `employees_assessments_ibfk_1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`employeeId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `employees_schedules`
+-- Constraints for table `employees_permissions`
+--
+ALTER TABLE `employees_permissions`
+  ADD CONSTRAINT `employees_permissions_ibfk_1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`employeeId`);
+
+--
+-- Constraints for table `employees_schedules`
 --
 ALTER TABLE `employees_schedules`
   ADD CONSTRAINT `employees_schedules_ibfk_1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`employeeId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `employees_sicks`
+-- Constraints for table `employees_sicks`
 --
 ALTER TABLE `employees_sicks`
   ADD CONSTRAINT `employees_sicks_ibfk_1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`employeeId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `employees_vacations`
+-- Constraints for table `employees_vacations`
 --
 ALTER TABLE `employees_vacations`
-  ADD CONSTRAINT `employees_vacations_ibfk_1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`employeeId`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `employees_vacations_ibfk_1` FOREIGN KEY (`vacationId`) REFERENCES `employees` (`employeeId`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
