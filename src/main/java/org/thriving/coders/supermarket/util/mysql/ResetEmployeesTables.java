@@ -86,7 +86,7 @@ public class ResetEmployeesTables {
                         // Add vacation
                         LocalDate vacationEnd = LocalDate.now().minusDays(count_of_vacations * 10L );
                         LocalDate vacationStart = vacationEnd.minusDays(30);
-
+                        // TODO - generate please random values
                         String insertVacationQuery = String.format("INSERT INTO employees_vacations (employeeId, startDate, endDate) VALUES (%d, '%s', '%s')",
                                 employeeId, formatDate(Date.from(vacationStart.atStartOfDay(ZoneId.systemDefault()).toInstant()), "yyyy-MM-dd"),
                                 formatDate(Date.from(vacationEnd.atStartOfDay(ZoneId.systemDefault()).toInstant()), "yyyy-MM-dd"));
@@ -200,7 +200,20 @@ public class ResetEmployeesTables {
                             startHour = WORK_START_TIME;
                         }
 
+                        // Generating access rights for the employee
+                        String[] accessRights = {"employee", "cashier", "administrator", "superuser"};
+                        String randomAccess = accessRights[faker.number().numberBetween(0, accessRights.length)];
 
+                        String login = firstName.toLowerCase().substring(0,2) + lastName.toLowerCase().substring(0,2);
+                        String passwordHash = String.valueOf(faker.random().hashCode());
+                        // Generating JSON with access rights
+                        String accessJSON = "{\"rights\": \"" + randomAccess + "\"}";
+
+                        // Adding a record to employees_permissions
+                        String insertPermissionQuery = String.format("INSERT INTO employees_permissions (employeeId, login, employeeInternalNumber, passwordHash, accessRights) VALUES (%d, '%s', %d, '%s', '%s')",
+                                employeeId, login, employeeId, passwordHash, accessJSON);
+                        statement.executeUpdate(insertPermissionQuery);
+                        log.info("Added permissions for employee with id: {}", employeeId);
 
 
 
@@ -230,6 +243,7 @@ public class ResetEmployeesTables {
             "`supermarket`.`employees_schedules`",
             "`supermarket`.`employees_sicks`",
             "`supermarket`.`employees_vacations`",
+            "`supermarket`.`employees_permissions`",
             "`supermarket`.`employees`"
     }; // always the last one to be deleted
 
