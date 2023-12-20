@@ -239,6 +239,11 @@ ALTER TABLE `employees_vacations`
   ADD CONSTRAINT `employees_vacations_ibfk_1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`employeeId`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
+--- added default
+ALTER TABLE `employees_vacations` CHANGE `reason` `reason` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
+ALTER TABLE `employees_sicks` CHANGE `medicalCertificate` `medicalCertificate` MEDIUMBLOB NULL DEFAULT NULL;
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
